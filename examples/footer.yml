@@ -1,0 +1,26 @@
+---
+description: Footer component.
+
+imports:
+  react: React
+  prop-types: PropTypes
+  ../../common/utility/styles: [ authColors ]
+
+name: Footer
+
+props:
+  isExternal:
+    required: true
+    type: bool
+    description: Whether this component is being used externally.
+  router:
+    required: true
+    type: shape
+    description: React Router.
+    children:
+      push:
+        required: true
+        type: func
+
+type: function
+...

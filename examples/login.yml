@@ -1,0 +1,46 @@
+---
+description: Login component.
+
+functions: [ onAnyChange, componentDidMount ]
+
+imports:
+  react: React
+  prop-types: PropTypes
+  ./components/AuthErrorDisplay: AuthErrorDisplay
+  ../common/components/CustomLink: CustomLink
+  ./components/FeedbackTitle: FeedbackTitle
+  ./components/Footer: Footer
+  ../common/components/FormButton: FormButton
+  ../common/components/Logo: Logo
+  ../common/components/TextInputField: TextInputField
+  ../common/utility/validations: [ checkEmail ]
+  ../common/utility/animations: [ fade ]
+  ../common/utility/methods: [ fadeAction, getDomain, onResize, testIE11AndiOSChrome ]
+
+name: Login
+
+props:
+  router:
+    required: true
+    type: shape
+    description: React Router.
+    children:
+      push:
+        required: true
+        type: func
+
+state: # Disregard if type == functional.
+  innerWidth: window.innerWidth
+  innerHeight: window.innerHeight
+  isAutofilled: false
+  passwordErrorText: ""
+  passwordValue: ""
+  emailErrorText: ""
+  emailValue: ""
+  style:
+    opacity: 0
+  submitButtonDisabled: true
+  timesUpdated: 0
+
+type: class
+...
