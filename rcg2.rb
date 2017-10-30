@@ -32,15 +32,9 @@ class Generator
         file.close
     end
 
-    def iterateState(state, stateCallback, tabs)
-        state.each do |k, v|
-            stateCallback.(k, v, tabs)
-        end
-    end
-
-    def iterateProps(props, propsCallback, tabs)
-        props.each do |k, v|
-            propsCallback.(k, v, tabs)
+    def iterateStruct(struct, callback, tabs)
+        struct.each do |k, v|
+            callback.(k, v, tabs)
         end
     end
 
@@ -97,7 +91,7 @@ class Generator
         initState = -> (k, v, tabs) {
             if v.is_a? Hash
                 constructor << "#{@t * tabs}#{k}: {\n"
-                self.iterateState(v, initState, tabs + 1)
+                self.iterateStruct(v, initState, tabs + 1)
                 constructor.last.gsub!(/,$/, "")
                 constructor << "#{@t * tabs}},\n"
             elsif v == ""
@@ -106,7 +100,7 @@ class Generator
                 constructor << "#{@t * tabs}#{k}: #{v},\n"
             end
         }
-        self.iterateState(@state, initState, 3)
+        self.iterateStruct(@state, initState, 3)
         constructor.last.gsub!(/,$/, "")
 
         constructor << "#{@t * 2}}\n"
@@ -133,7 +127,7 @@ class Generator
             funcStart += "#{k}, "
             docStart << "#{@docPrefixes[:startLine]}@param {#{v["type"]}} #{k} #{v["description"]}"
         }
-        self.iterateProps(@props, initParams, 0)
+        self.iterateStruct(@props, initParams, 0)
 
         funcStart.gsub!(/, $/, " ")
         funcStart += "}) => {\n"
@@ -183,14 +177,14 @@ class Generator
 
             if !v["children"].nil?
                 proptypesString << "({\n"
-                self.iterateProps(v["children"], propGen, tabs + 1)
+                self.iterateStruct(v["children"], propGen, tabs + 1)
                 proptypesString.last.gsub!(/,$/, "")
                 proptypesString << "#{@t * tabs}})#{isRequired},\n"
             else
                 proptypesString << "#{isRequired},\n"
             end
         }
-        self.iterateProps(@props, propGen, 1)
+        self.iterateStruct(@props, propGen, 1)
         proptypesString.last.gsub!(/,$/, "")
 
         proptypesString << "}\n\n"
