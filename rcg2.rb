@@ -38,8 +38,8 @@ class Generator
         end
     end
 
-    def iterateProps(propsCallback, tabs)
-        @props.each do |k, v|
+    def iterateProps(props, propsCallback, tabs)
+        props.each do |k, v|
             propsCallback.(k, v, tabs)
         end
     end
@@ -106,7 +106,7 @@ class Generator
                 constructor << "#{@t * tabs}#{k}: #{v},\n"
             end
         }
-        iterateState(@state, initState, 3)
+        self.iterateState(@state, initState, 3)
         constructor.last.gsub!(/,$/, "")
 
         constructor << "#{@t * 2}}\n"
@@ -133,7 +133,7 @@ class Generator
             funcStart += "#{k}, "
             docStart << "#{@docPrefixes[:startLine]}@param {#{v["type"]}} #{k} #{v["description"]}"
         }
-        self.iterateProps(initParams, 0)
+        self.iterateProps(@props, initParams, 0)
 
         funcStart.gsub!(/, $/, " ")
         funcStart += "}) => {\n"
@@ -168,9 +168,38 @@ class Generator
             
         self.writeFile(returnString.join(""), "a")
     end
+    
+    def closeOut
+        closeString = "}\n\n"
+        self.writeFile(closeString, "a")
+    end
 
-    def close
-        self.writeFile("}", "a")
+    def generateProptypes
+        proptypesString = [ "#{@name}.propTypes = {\n" ]
+
+        propGen = -> (k, v, tabs) {
+            proptypesString << "#{@t * tabs}#{k}: React.PropTypes.#{v["type"]}"
+            isRequired = v["required"] ? ".isRequired" : ""
+
+            if !v["children"].nil?
+                proptypesString << "({\n"
+                self.iterateProps(v["children"], propGen, tabs + 1)
+                proptypesString.last.gsub!(/,$/, "")
+                proptypesString << "#{@t * tabs}})#{isRequired},\n"
+            else
+                proptypesString << "#{isRequired},\n"
+            end
+        }
+        self.iterateProps(@props, propGen, 1)
+        proptypesString.last.gsub!(/,$/, "")
+
+        proptypesString << "}\n\n"
+
+        self.writeFile(proptypesString.join(""), "a")
+    end
+
+    def generateExport
+        self.writeFile("export default #{@name};", "a")
     end
 end
 
@@ -184,4 +213,6 @@ gen.generateDependencies
 gen.generateInit
 gen.generateFunctions if gen.isClass?
 gen.generateReturn
-gen.close
+gen.closeOut
+gen.generateProptypes
+gen.generateExport

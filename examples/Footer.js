@@ -20,3 +20,12 @@ import { authColors } from '../../common/utility/styles';
 const Footer = ({ isExternal, router }) => {
     return ();
 }
+
+Footer.propTypes = {
+    isExternal: React.PropTypes.bool.isRequired,
+    router: React.PropTypes.shape({
+        push: React.PropTypes.func.isRequired
+    }).isRequired
+}
+
+export default Footer;

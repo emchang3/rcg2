@@ -59,3 +59,11 @@ class Login extends React.Component {
         return ();
     }
 }
+
+Login.propTypes = {
+    router: React.PropTypes.shape({
+        push: React.PropTypes.func.isRequired
+    }).isRequired
+}
+
+export default Login;
