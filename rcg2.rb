@@ -2,8 +2,9 @@ require "yaml"
 require "json"
 
 class Generator
-    def initialize(filename)
+    def initialize(filename, destination)
         config = YAML.load_file(filename)
+        Dir.chdir(destination)
 
         @imports = config["imports"]
         @type = config["type"]
@@ -197,12 +198,14 @@ class Generator
     end
 end
 
-path = ARGV[0].split("/")
+path = File.realpath(ARGV[0]).split("/")
+dest = File.realpath(ARGV[1])
+
 file = path.pop
 
 Dir.chdir(path.join("/"))
 
-gen = Generator.new(file)
+gen = Generator.new(file, dest)
 gen.generateDependencies
 gen.generateInit
 gen.generateFunctions if gen.isClass?
