@@ -1,6 +1,8 @@
 ---
 description: Login component.
+
 functions: [ onAnyChange, componentDidMount ]
+
 imports:
   react: React
   prop-types: PropTypes
@@ -14,7 +16,9 @@ imports:
   ../common/utility/validations: [ checkEmail ]
   ../common/utility/animations: [ fade ]
   ../common/utility/methods: [ fadeAction, getDomain, onResize, testIE11AndiOSChrome ]
+
 name: Login
+
 props:
   router:
     required: true
@@ -24,6 +28,7 @@ props:
       push:
         required: true
         type: func
+
 state: # Disregard if type == functional.
   innerWidth: window.innerWidth
   innerHeight: window.innerHeight
@@ -36,5 +41,6 @@ state: # Disregard if type == functional.
     opacity: 0
   submitButtonDisabled: true
   timesUpdated: 0
+
 type: class
 ...
