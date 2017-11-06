@@ -173,14 +173,18 @@ class Generator
         proptypesString = [ "#{@name}.propTypes = {\n" ]
 
         propGen = -> (k, v, tabs) {
-            proptypesString << "#{@t * tabs}#{k}: React.PropTypes.#{v["type"]}"
+            proptypesString << "#{@t * tabs}#{k}: "
+            proptypesString << "PropTypes.arrayOf(" if v["array"]
+            proptypesString << "PropTypes.#{v["type"]}"
             isRequired = v["required"] ? ".isRequired" : ""
 
             if !v["children"].nil?
                 proptypesString << "({\n"
                 self.iterateStruct(v["children"], propGen, tabs + 1)
                 proptypesString.last.gsub!(/,$/, "")
-                proptypesString << "#{@t * tabs}})#{isRequired},\n"
+                proptypesString << "#{@t * tabs}})"
+                proptypesString << ")" if v["array"]
+                proptypesString << "#{isRequired},\n"
             else
                 proptypesString << "#{isRequired},\n"
             end
