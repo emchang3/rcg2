@@ -126,7 +126,8 @@ class Generator
 
         initParams = -> (k, v, tabs) {
             funcStart += "#{k}, "
-            docStart << "#{@docPrefixes[:startLine]}@param {#{v["type"]}} #{k} #{v["description"]}"
+            req = v["required"] ? "(required)" : "(optional)"
+            docStart << "#{@docPrefixes[:startLine]}@param {#{v["type"]}} #{k} #{req} #{v["description"]}"
         }
         self.iterateStruct(@props, initParams, 0)
 
