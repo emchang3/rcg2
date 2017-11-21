@@ -170,6 +170,28 @@ class Generator
         self.writeFile(closeString, "a")
     end
 
+    def generateDefaults
+        defaultString = [ "#{@name}.defaultProps = {\n" ]
+
+        defaultGen = -> (k, v, tabs) {
+            if !v["default"].nil?
+                if v["default"] == ""
+                    defaultString << "#{@t * tabs}#{k}: '',\n"
+                elsif v["default"].is_a?(String) && v["default"] != "null"
+                    defaultString << "#{@t * tabs}#{k}: '#{v["default"]}',\n"
+                else
+                    defaultString << "#{@t * tabs}#{k}: #{v["default"]},\n"
+                end
+            end
+        }
+        self.iterateStruct(@props, defaultGen, 1)
+        defaultString.last.gsub!(/,$/, "")
+        
+        defaultString << "}\n\n"
+
+        self.writeFile(defaultString.join(""), "a")
+    end
+
     def generateProptypes
         proptypesString = [ "#{@name}.propTypes = {\n" ]
 
@@ -216,5 +238,6 @@ gen.generateInit
 gen.generateFunctions if gen.isClass?
 gen.generateReturn
 gen.closeOut
+gen.generateDefaults
 gen.generateProptypes
 gen.generateExport

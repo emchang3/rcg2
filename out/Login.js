@@ -60,6 +60,9 @@ class Login extends React.Component {
     }
 }
 
+Login.defaultProps = {
+}
+
 Login.propTypes = {
     router: PropTypes.shape({
         push: PropTypes.func.isRequired

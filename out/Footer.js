@@ -21,6 +21,9 @@ const Footer = ({ isExternal, router }) => {
     return ();
 }
 
+Footer.defaultProps = {
+}
+
 Footer.propTypes = {
     isExternal: PropTypes.bool.isRequired,
     router: PropTypes.shape({
