@@ -13,6 +13,7 @@ props:
     required: true
     type: bool
     description: Whether this component is being used externally.
+    default: false
   router:
     required: true
     type: shape

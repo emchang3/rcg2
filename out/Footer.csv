@@ -1,0 +1,5 @@
+PROPS
+
+NAME, REQUIRED, TYPE, DEFAULT, DESCRIPTION
+isExternal, true, bool, false, Whether this component is being used externally.
+router, true, shape, , React Router.

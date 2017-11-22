@@ -34,9 +34,7 @@ class Generator
     end
 
     def iterateStruct(struct, callback, tabs)
-        struct.each do |k, v|
-            callback.(k, v, tabs)
-        end
+        struct.each { |k, v| callback.(k, v, tabs) }
     end
 
     def generateDependencies
@@ -222,6 +220,7 @@ class Generator
 
     def generateExport
         self.writeFile("export default #{@name};", "a")
+        @targetFile.close
     end
 end
 
