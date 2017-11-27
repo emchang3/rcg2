@@ -220,7 +220,6 @@ class Generator
 
     def generateExport
         self.writeFile("export default #{@name};", "a")
-        @targetFile.close
     end
 end
 
