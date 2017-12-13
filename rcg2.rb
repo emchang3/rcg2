@@ -175,7 +175,7 @@ class Generator
             if !v["default"].nil?
                 if v["default"] == ""
                     defaultString << "#{@t * tabs}#{k}: '',\n"
-                elsif v["default"].is_a?(String) && v["default"] != "null"
+                elsif v["default"].is_a?(String) && v["default"] != "null" && v["default"] != "[]"
                     defaultString << "#{@t * tabs}#{k}: '#{v["default"]}',\n"
                 else
                     defaultString << "#{@t * tabs}#{k}: #{v["default"]},\n"
